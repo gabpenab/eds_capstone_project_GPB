@@ -1,8 +1,8 @@
 # eds_capstone_project_GPB
 
-Project Title: Species distribution model from a cave-dwelling bat
+Project Title: Species distribution model from a cave-dwelling species
 
-This project models the current and future geographic distribution of Natalus tumidirostris, a cave-dwelling bat species in Colombia to identify suitable habitat and conservation gaps under climate change.
+This project models the current and future geographic distribution of Natalus tumidirostris, a cave-dwelling species in Colombia to identify suitable habitat and conservation gaps under climate change.
 The repository is organized into data: raw, processed, archive, output, metadata (dataset descriptions), and analysis (notebooks). And scripts (analysis, cleaning, and archive)
 
 Data Sources - occurrence: GBIF
