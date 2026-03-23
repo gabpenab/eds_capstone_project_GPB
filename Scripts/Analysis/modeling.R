@@ -155,6 +155,8 @@ model_ensemble <- BIOMOD_EnsembleModeling( bm.mod = model_cur,
                                      metric.select.thresh = 0.6,
                               #weighted ensemble, model contributes according to evaluation score
                                      em.algo ="EMwmean")
+summary(model_ensemble)
+get_evaluations(model_ensemble)
 
 ###############
 # PROJECTIONS
