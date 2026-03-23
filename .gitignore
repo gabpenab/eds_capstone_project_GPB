@@ -1,0 +1,13 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+# Scripts folder
+Scripts/.RData
+Scripts/.RDataTmp
+Scripts/.Rhistory
+# Large data folders - DO NOT UPLOAD
+data/raw_data/climate/
+data/raw_data/WDPA/
+model/
