@@ -1,4 +1,4 @@
-# Project:Impact of climate change on oilbirds in Colombia
+# Project: Impact of climate change on oilbirds in Colombia
 
 Author: Gabriela Peña Bello
 
@@ -24,10 +24,13 @@ Results indicate that, even under the worst-case scenario, suitable habitat decr
 ## PROCESS
 1.	Download data 
 2.	Clean ocurrence data: remove records without coordinates, remove unnecessary  collumns, correct errors  and filter for spatial redundance.
+
 Script: /Cleaning/occ_cleaning_oilb.ipynb
 3.	Clean climate data: Clip the raster to Colombia, analyze multicollinariaty and select key variables (correlation and PCA).
+
 Script: /Cleaning/climate_cleaning
 4.	Create pseudo-absence points
+
 Script: this and all the following steps are in Analysis/modeling
 5.	Create model with cross-validation
 6. Evaluate model performance and variable importance
@@ -59,9 +62,15 @@ The dataset includes rasters of 19 bioclimatic variables at ~1 km resolution, de
 Maxent in working directory
 
 ## LICENSE
-License –Educational use only
+This project currently does not include a formal license. 
+The materials are shared for academic and non-commercial use.  
+
+If you wish to reuse or adapt any part of this repository, please provide appropriate credit to the author.
 
 **Contact Info** gpenab19@gmail.com
 
+## CITATION
 
+Peña Bello, G. (2026). *Impact of Climate Change on Oilbirds in Colombia*.  
+GitHub repository: [https://github.com/gabpenab/eds_capstone_project_GPB]
 

@@ -32,4 +32,10 @@ Intermediate outputs generated during the analysis are stored in /analysis, whil
 
 All data processing steps are documented in the /scripts directory.
 
+### Ethical Considerations  
+
+Data was obtained from open-access databases and used in accordance with their terms of use. Sensitive ecological information, such as precise locations of species dependent on vulnerable habitats (e.g., caves), should be handled with care to avoid potential disturbance or exploitation.
+
+This project aims to support conservation planning and does not promote activities that may negatively impact wildlife or their habitats.
+
                 
