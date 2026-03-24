@@ -15,7 +15,7 @@ Country-level polygon used to define the study extent.
 **Processing script:** /scripts/Cleaning/climate_cleaning.R
 
 ### Climate data
-Selected bioclimatic variables used as predictors in the models.
+Selected bioclimatic variables used as predictors in the model, masked to Colombia shapefile
 
 - BIO1 (Annual Mean Temperature)
 - BIO2 (Mean Diurnal Range)
@@ -27,6 +27,7 @@ Selected bioclimatic variables used as predictors in the models.
 **Processing script:** /scripts/Cleaning/climate_cleaning.R
 
 ### WDPA data
-Filtered dataset containing only protected areas within Colombia. This subset was used to evaluate overlap with predicted habitat suitability.
+Filtered dataset containing only protected areas within Colombia. 
+This subset will be used to evaluate overlap with predicted habitat suitability.
 
 **Processing script:** /scripts/Cleaning/protected_areas.R

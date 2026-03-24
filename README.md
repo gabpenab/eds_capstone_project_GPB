@@ -1,11 +1,11 @@
-# PROJECT: IMPACT OF CLIMATE CHANGE ON OILBIRDS IN COLOMBIA
+# Project:Impact of climate change on oilbirds in Colombia
 
 Author: Gabriela Peña Bello
 
 Course: Environmental Data Science \- Yale the School of the Environment
 
 
-Last update: 17.03.2026
+Last update: 25.03.2026
 
 ## RESEARCH QUESTIONS
 
@@ -17,20 +17,18 @@ Environmental authorities (national and local) and  local communities living alo
 
 ## ABSTRACT
 
-Oilbirds are unique nocturnal birds that depend on caves. They contribute to forest regeneration, by dispersing seeds over long distances, especially for native palms. In cave ecosystems, their guano supports entire communities of organisms. 
+Oilbirds are nocturnal, cave-dependent birds that play a key role in forest regeneration by dispersing seeds over long distances and sustaining cave ecosystems through nutrient inputs. This project uses species distribution models to estimate current habitat suitability in Colombia and project future changes under two climate scenarios (SSP1-2.6 and SSP5-8.5). 
 
-However, climate change is altering temperature and rainfall patterns, which can shift ecosystems and reduce the suitable habitats for this species. To address this, this project uses species distribution models to estimate current habitat suitability and project it to future conditions under two scenarios: SSP 126 (low-emissions scenario, less drastic climate change) and SSP 585 (high emissions scenario, intense climatic changes).
-
-Results suggest that oilbirds may be less severely affected than expected. Under the worst-case scenario (SSP5-8.5), favorable habitat decreases by 26% on average but does not disappear. Instead, suitability shifts toward the western mountain range. These results indicate that conservation efforts should prioritize protecting existing roost sites and surrounding forests in current western distribution areas.
+Results indicate that, even under the worst-case scenario, suitable habitat decreases by about 26% but does not disappear; instead, it shifts toward the western mountain range. These findings suggest that conservation efforts should focus on protecting existing roost sites and surrounding forests within current distribution areas.
 
 ## PROCESS
 1.	Download data 
 2.	Clean ocurrence data: remove records without coordinates, remove unnecessary  collumns, correct errors  and filter for spatial redundance.
-Script: 
+Script: /Cleaning/occ_cleaning_oilb.ipynb
 3.	Clean climate data: Clip the raster to Colombia, analyze multicollinariaty and select key variables (correlation and PCA).
-Script: 
+Script: /Cleaning/climate_cleaning
 4.	Create pseudo-absence points
-Script: this and all the following steps are in 
+Script: this and all the following steps are in Analysis/modeling
 5.	Create model with cross-validation
 6. Evaluate model performance and variable importance
 7.	Build the ensemble model
@@ -62,8 +60,8 @@ Maxent in working directory
 
 ## LICENSE
 License –Educational use only
-**Contact Info** Gabriela Peña Bello 
-                 gpenab19@gmail.com
+
+**Contact Info** gpenab19@gmail.com
 
 
 

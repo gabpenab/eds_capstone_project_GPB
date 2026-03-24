@@ -157,7 +157,6 @@ model_ensemble <- BIOMOD_EnsembleModeling( bm.mod = model_cur,
                                      em.algo ="EMwmean")
 summary(model_ensemble)
 get_evaluations(model_ensemble)
-
 ###############
 # PROJECTIONS
 ##############
@@ -316,21 +315,22 @@ summary(val_delta_585_2071)
 
 ##Plotting
 delta_585_2071_df <- as.data.frame(delta_585_2071, xy = TRUE, na.rm=TRUE)
-colnames(delt
-                       geom_raster(aes(x = x, y = y, fill = delta)) +
-                       scale_fill_gradient2(low = "red",
-                       mid = "white",
-                       high = "blue",
-                       midpoint = 0,
-                       name = "Change in suitability" ) +
-  coord_equal() +
-  theme_minimal() +a_585_2071_df) <- c("x","y","delta")
+colnames(delta_585_2071_df) <- c("x","y","delta")
+                       
 delta_585_2071_plot <- ggplot(delta_585_2071_df) +
-  labs(title = "Change in habitat suitability",
-       #subtitle ="Under scenario SSP 585 for years 2071-2100",
-       x= "Decimal Longitude ",
-       y =  "Decimal Latitude")+
-  theme(plot.title = element_text(hjust = 0.5, size = 10))
+                      geom_raster(aes(x = x, y = y, fill = delta)) +
+                      scale_fill_gradient2(low = "red",
+                                           mid = "white",
+                                           high = "blue",
+                                           midpoint = 0,
+                                        name = "Change in suitability" ) +
+                      coord_equal() +
+                      theme_minimal() +
+                       labs(title = "Change in habitat suitability",
+                       #subtitle ="Under scenario SSP 585 for years 2071-2100",
+                      x= "Decimal Longitude ",
+                      y =  "Decimal Latitude")+
+                    theme(plot.title = element_text(hjust = 0.5, size = 10))
 
 delta_585_2071_plot
 

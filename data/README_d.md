@@ -1,6 +1,6 @@
 # Data Directory
 
-This folder contains all datasets used in this project, organized into raw and processed data.
+This folder contains all datasets used in this project, organized into different folders.
 
 ## Structure
 
@@ -10,17 +10,17 @@ See /raw_data/README.md for full descriptions of each dataset.
 
 ### Clean_data
 Processed datasets used for analysis, derived from raw data after cleaning and filtering steps.
-See /clean_data/README.md for details on data processing and transformations.
+See Scripts/Cleaning/README.md for details on data processing and transformations.
 
 ### Analysis
 Intermediate outputs generated during exploratory and analytical steps. These files are not all included in the final report but are stored to document the analytical process.
 See /scripts/Analysis for details on data analysis 
 
 ### Outputs
-Final results, figures, materials used for communication and reporting.
+Final results and materials used for communication and reporting.
 
 ### Archive 
-Old versions and superseded files retained for reference but not used in the final analysis.
+Old versions files retained for reference but not used in the final analysis.
 
 ## Data Workflow
 

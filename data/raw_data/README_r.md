@@ -14,6 +14,9 @@ These data were obtained from previous academic coursework and are used to defin
 
 ### Climate data
 
+Due to large file sizes these data could not be hosted on github, you can find it in these google drive
+with the same folder structure https://drive.google.com/drive/folders/12btA8UOC8NaSU5ZF-FKrL1LWxww0oX30?usp=drive_link
+
 The climate data was obtained from CHELSA-bioclim (Climatologies at High Resolution for the Earth’s Land Surface). https://www.chelsa-climate.org/datasets/chelsa_bioclim
                 The dataset includes rasters of 19 bioclimatic variables at ~1 km resolution, derived from temperature and precipitation, cut to Colombia bounding box.
                 You will find two folders: V2.1 Climatologies (1981 to 2010) Baseline conditions
@@ -44,7 +47,11 @@ The climate data was obtained from CHELSA-bioclim (Climatologies at High Resolut
 
 ### WDPA data: 
 
+Due to large file sizes these data could not be hosted on github, you can find it in these google drive
+with the same folder structure https://drive.google.com/drive/folders/12btA8UOC8NaSU5ZF-FKrL1LWxww0oX30?usp=drive_link
+
 This folder refers to Protected areas data obtained from the World Database on Protected Areas (WDPA) https://www.protectedplanet.net/en/thematic-areas/wdpa?tab=WDPA
 
-The dataset includes global spatial data (polygons and points), provided in three folders with accompanying documentation. These data were used to assess overlap between predicted habitat suitability and protected areas.
+The dataset includes global spatial data (polygons and points), provided in three folders with accompanying documentation. These data will used to assess overlap between predicted habitat suitability and protected areas.
+However, is not used in the current analysis.
                 
