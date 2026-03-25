@@ -5,7 +5,7 @@ Author: Gabriela Peña Bello
 Course: Environmental Data Science \- Yale the School of the Environment
 
 
-Last update: 25.03.2026
+Last update: 26.03.2026
 
 ## RESEARCH QUESTIONS
 
@@ -17,9 +17,10 @@ Environmental authorities (national and local) and  local communities living alo
 
 ## ABSTRACT
 
-Oilbirds are nocturnal, cave-dependent birds that play a key role in forest regeneration by dispersing seeds over long distances and sustaining cave ecosystems through nutrient inputs. This project uses species distribution models to estimate current habitat suitability in Colombia and project future changes under two climate scenarios (SSP1-2.6 and SSP5-8.5). 
+Oilbirds are nocturnal, cave-dependent birds that play a key role in forest regeneration by dispersing seeds over long distances and sustaining cave ecosystems through nutrient inputs. This project uses species distribution models to estimate current habitat suitability in Colombia and project future changes under two climate scenarios: low emissions (SSP1-2.6)
+and high emissions (SSP5-8.5). 
 
-Results indicate that, even under the worst-case scenario, suitable habitat decreases by about 26% but does not disappear; instead, it shifts toward the western mountain range. These findings suggest that conservation efforts should focus on protecting existing roost sites and surrounding forests within current distribution areas.
+Results suggest that oilbirds may be less severely affected than expected.Favorable habitat for oilbirds does not dissapear, but contracts and shifts, with up to 18% of the area lost under the worst case scenario. Thefavorable habitat will move toward the western mountain range. Changes in suitability are primarily associated with diurnal temperature range and temperature seasonality.Thus, conservation efforts should focus on protecting roost sites and surrounding forests within current distribution in the western mountain range.
 
 ## PROCESS
 1.	Download data 

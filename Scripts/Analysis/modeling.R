@@ -21,38 +21,29 @@ setwd("C:/Users/gabyo/Escritorio/EDS_capstone_R")
 library(pacman)
 pacman::p_load(
    #Packages for visuals
-  ggplot2, # graphics
-  RColorBrewer, viridis, # Manipulate colors #colorspace,
-  gridExtra, #Combine and align graphics
+  RColorBrewer, viridis, # Manipulate colors 
   ggrepel, #Labels
   ggspatial, #maps 
+  patchwork, # panels
   
-  #Packages for spatial data
-  terra,sf,
+  # spatial data
+  rnaturalearth,
   
   #Analysis
   dismo,#model
   biomod2, #model
-  R.utils ### biomod needs it
-)
+  R.utils ) ### biomod needs it
 
-install.packages("biomod2")
-library(biomod2)
-install.packages("R.utils")## biomod needs it
-library(R.utils)
-library(patchwork)
+
 #Load libraries we already installed
 library(dplyr)
 library(tidyverse)
 library (readr)
-
 library (ggplot2)
 library(sf)
 library(terra)
 library(tidyterra)
-library(ggrepel)
-library(rnaturalearth)
-library(ggspatial)
+
 ##############
 ##Load data
 ##############
@@ -86,15 +77,11 @@ path_outputs <- "C:/Users/gabyo/Escritorio/EDS_capstone_R/data/Analysis/maps_mod
 #Since plots show different fonts i defined a theme for all final figures
 base_theme <- theme_minimal(base_size = 12) +
   theme(text = element_text(family = "sans"),
-        plot.title = element_text(face = "bold", size = 12, hjust = 0.5),
-        plot.subtitle = element_text(size = 10, hjust = 0.5, color = "gray40"),
-        axis.title = element_text(size = 11),
-        axis.text = element_text(size = 10))
-        #legend.text = element_text(size = 10),
-        #legend.title = element_text(size = 12),
-        #plot.margin = margin(10, 20, 10, 20))
-
-
+        plot.title = element_text(face = "bold", size = 18, hjust = 0.5),
+        plot.subtitle = element_text(size = 14, hjust = 0.5, color = "gray40"),
+        axis.title = element_text(size = 14),
+        axis.text = element_text(size = 12))
+        
 ################################################################################
 # Format data and pseudo-abscences
 ###############################################################################
@@ -466,25 +453,38 @@ area_plot <- ggplot(area_df, aes(x = period, y = area_km2, group = scenario, col
              geom_hline(yintercept = area_present_suit, linetype = "dashed", 
                         color = "gray40") +
              # lab of the line
-             annotate("text", x = "Present",  # or slightly to the right if you prefer
-                       y = area_present_suit,label = "Baseline",
-                       vjust = -1,hjust = 1.2, size = 3.5,color = "gray40")+
+             geom_text(data = data.frame(period = "Present",area_km2 = area_present_suit,
+                                         label = "Baseline"),
+                       aes(x = period, y = area_km2, label = label), size = 5,
+                       vjust = -1, hjust = 1.1, color = "gray40",
+                       inherit.aes = FALSE)+
              #End of line label 
-             geom_text_repel(data = subset(area_df, period == "2071-2100"),
-                             aes(label = ifelse(scenario == "SSP1-2.6", 
-                                      "Low emissions", "High emissions")),
-                            nudge_x = 0.2,direction = "y",hjust = 0,
-                            segment.color = NA) +
+             geom_text(data = subset(area_df, period == "2071-2100" & 
+                                       scenario == "SSP1-2.6"),
+                       aes(label = "Low emissions"),nudge_x = 0.05,
+                       nudge_y = 2000,hjust = 0,size = 5) +
+              geom_text(data = subset(area_df, period == "2071-2100" &
+                                        scenario == "SSP5-8.5"),
+                        aes(label = "High emissions"),nudge_x = 0.05,
+                        nudge_y = -4000, hjust = 0, size = 5) +
+             # other labs
              labs(title = "Projected change in suitable habitat area for oilbirds in Colombia",
                   x = "Time period",
-                  y = "Suitable area (km²)") +
-                  scale_color_manual(values = c("SSP1-2.6" = "#577590",
+                  y = "Suitable habitat area (km²)") +
+              scale_color_manual(values = c("SSP1-2.6" = "#577590",
                                               "SSP5-8.5" = "#F08A4B"),
-                                     labels = c("SSP1-2.6" = "Low emissions",
-                                                "SSP5-8.5" = "High emissions")) +
-             base_theme +
-             theme(legend.position = "none",
-                   plot.margin = margin(10, 30, 10, 10) )
+                                  labels = c("SSP1-2.6" = "Low emissions",
+                                             "SSP5-8.5" = "High emissions")) +
+             theme_minimal()+
+             #trouble with base theme, had to redifine here
+             theme(text = element_text(family = "sans"),
+                   plot.title = element_text(face = "bold", size = 18, hjust = 0.5,
+                                             margin = margin(t = 10, b = 15) ),
+                   axis.title = element_text(size = 14, margin = margin(r = 10, t=10) ),
+                   axis.text = element_text(size = 12),
+                   legend.position = "none",
+                   plot.margin = margin(10, 60, 10, 10) ) +
+              coord_cartesian(clip = "off")
 
 area_plot
 path_final <- "C:/Users/gabyo/Escritorio/EDS_capstone_R/data/Outputs/figures"
@@ -521,19 +521,20 @@ ens_plot_im_inset <- ens_plot_im +
 #Create full panel
 panel_585_2071 <- (ens_plot_im_inset| delta_585_2071_plot)+
                  plot_annotation(
-                 title = "Oilbirds could lose 18% of their habitat area in Colombia due to climate change",
+                 title = "Favorable areas for oilbirds move toward the western mountain range",
                  subtitle = "Under High emissions scenario (SSP5-8.5) for years 2071-2100",
-                 theme = theme(plot.title = element_text(size = 16, face ="bold",
+                 theme = theme(plot.title = element_text(size = 20, face ="bold",
                                                 margin = margin(l = 10)),
-                      plot.subtitle = element_text(size = 14, 
+                      plot.subtitle = element_text(size = 16, 
                                                    margin = margin(b = 10, l= 10)),
-                      plot.margin = margin(t = 20)))
+                      plot.margin = margin(t = 20))) 
+                     
 
 
 panel_585_2071
 
 ggsave(filename = paste0(path_final, '/', "oilbird_change_585_2071_2.tiff"),
-       panel_585_2071, width= 16, height=8, dpi =300)
+       panel_585_2071, width= 14, height=8, dpi =300)
 
 #final visualization of variable importance
 plot_var_imp_b <-ggplot(var_imp_sum, aes(x = reorder(expl.var, mean_imp), 

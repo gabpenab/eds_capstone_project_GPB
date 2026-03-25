@@ -63,7 +63,7 @@ pacman::p_load(
   GGally, # correlation plots
   
   #Packages for spatial data
-  terra,sf,
+  terra,sf,tidyterra
   
   #Analysis
   caret,# correlation
@@ -71,20 +71,6 @@ pacman::p_load(
   FactoMineR, #PCA
   
 )
-
-
-library(sf)
-library(terra)
-library(dplyr)
-library(tidyverse)
-library(devtools)
-library (readr)
-library(GGally)
-library(FactoMineR)
-library(usdm)
-library(factoextra)
-library(caret)
-library(remotes)#comes in devtools
 
 remotes::install_github("HelgeJentsch/ClimDatDownloadR")# Package to extract data 
 library(ClimDatDownloadR)
