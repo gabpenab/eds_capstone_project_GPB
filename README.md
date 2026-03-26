@@ -23,6 +23,9 @@ and high emissions (SSP5-8.5).
 Results suggest that oilbirds may be less severely affected than expected.Favorable habitat for oilbirds does not dissapear, but contracts and shifts, with up to 18% of the area lost under the worst case scenario. Thefavorable habitat will move toward the western mountain range. Changes in suitability are primarily associated with diurnal temperature range and temperature seasonality.Thus, conservation efforts should focus on protecting roost sites and surrounding forests within current distribution in the western mountain range.
 
 ## PROCESS
+
+To start working on this project in RStudio, open the .Rproj file. This ensures that the working directory is set to the project root. Opening only the .R or the .Rmd file may be insufficient.
+
 1.	Download data 
 2.	Clean ocurrence data: remove records without coordinates, remove unnecessary  collumns, correct errors  and filter for spatial redundance.
 

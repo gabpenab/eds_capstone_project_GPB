@@ -15,8 +15,7 @@
 ################################################################################
 # Prepare workspace and load data
 ###############################################################################
-# Set working space
-setwd("C:/Users/gabyo/Escritorio/EDS_capstone_R")
+
 # Install and Load libraries we haven´t installed
 library(pacman)
 pacman::p_load(
@@ -48,28 +47,29 @@ library(tidyterra)
 ##Load data
 ##############
 
-path <-"C:/Users/gabyo/Escritorio/EDS_capstone_R/data/Analysis/model"
-
 #current bioclimatic raster
-clima <- terra::rast('C:/Users/gabyo/Escritorio/EDS_capstone_R/data/clean_data/climate/clima.tif')
+clima <- terra::rast(here("data","clean_data","climate","clima.tif"))
 
 #Future bioclimatic rasters
 
 # ssp126 -years 2041-2070
-clim_126_2040 <- terra::rast('C:/Users/gabyo/Escritorio/EDS_capstone_R/data/clean_data/climate/clim_126_2040.tif')
+clim_126_2040 <- terra::rast(here("data","clean_data","climate","clim_126_2040.tif"))
 #ssp126-years 2070-2100
-clim_126_2071<- terra::rast('C:/Users/gabyo/Escritorio/EDS_capstone_R/data/clean_data/climate/clim_126_2071.tif')
+clim_126_2071<- terra::rast(here("data","clean_data","climate","clim_126_2071.tif"))
 
 # ssp585 -years 2041-2070
-clim_585_2040 <- terra::rast('C:/Users/gabyo/Escritorio/EDS_capstone_R/data/clean_data/climate/clim_585_2040.tif')
+clim_585_2040 <- terra::rast(here("data","clean_data","climate","clim_585_2040.tif"))
 #ssp585-years 2070-2100
-clim_585_2071<- terra::rast('C:/Users/gabyo/Escritorio/EDS_capstone_R/data/clean_data/climate/clim_585_2071.tif')
+clim_585_2071<- terra::rast(here("data","clean_data","climate","clim_585_2071.tif"))
 
 #Ocurrence data
-occ_env_clean <- read_csv("C:/Users/gabyo/Escritorio/EDS_capstone_R/data/clean_data/ocurrence/occ_env_clean.csv")
+occ_env_clean <- read_csv(here("data","clean_data","ocurrence","occ_env_clean.csv"))
 
 # Set path for outputs
-path_outputs <- "C:/Users/gabyo/Escritorio/EDS_capstone_R/data/Analysis/maps_model"
+#maps
+path_outputs <- here("data","Analysis","maps_model")
+#model
+path_model <- here("data","Analysis","model")
 
 ###################
 # Standarize plots
@@ -108,13 +108,13 @@ data_mod <- BIOMOD_FormatingData (resp.var = cat,
                                   expl.var = clima,
                                   resp.xy = occ_coords,
                                   resp.name = species,
-                                  dir.name = path,
+                                  dir.name = path_model,
                                   data.type = "binary",
                                   # Number of repetitions of pseudo-abscence
                                   PA.nb.rep = 2,
                                   #Number of pb per repetition
                                   PA.nb.absences = 1000,
-                                  #Way of doing pseudo-abscenses
+                                  #Way of doing pseudo-abscences
                                   PA.strategy = "random")
 
 
@@ -126,6 +126,7 @@ data_mod <- BIOMOD_FormatingData (resp.var = cat,
 # MODELS
 #################
 model_cur <- BIOMOD_Modeling( data_mod,
+                              modeling.id = "current"
                               models = "MAXENT",
                               CV.strategy = "kfold", #use k fold cross-validation
                               CV.k = 5, #Number of folds
@@ -168,6 +169,7 @@ model_ensemble <- BIOMOD_EnsembleModeling( bm.mod = model_cur,
                                      em.algo ="EMwmean")
 summary(model_ensemble)
 get_evaluations(model_ensemble)
+
 ###############
 # PROJECTIONS
 ##############
@@ -376,26 +378,25 @@ head(eval_table)#342 pixel with s > 342 = suitable -presence
 #Extract the cutoff value 
 threshold <- eval_table$cutoff[eval_table$metric.eval == "TSS"]
 
-# Since I have a new R session i have to reload some files, avoid this step if
+# Since I have a new R session i had to reload some files, avoid this step if
 #you are in the same session
-model_path <- "C:/Users/gabyo/Escritorio/EDS_capstone_R/model" 
 
 # Reload models from disk - biomod2 saves them automatically to your path
-load(paste0(model_path, "/Oilbird.Steatornis.caripensis/Oilbird.Steatornis.caripensis.1773435014.models.out"))
-load(paste0(model_path, "/Oilbird.Steatornis.caripensis/Oilbird.Steatornis.caripensis.1773435014.ensemble.models.out"))             
+load(paste0(path_model, "/Oilbird.Steatornis.caripensis/Oilbird.Steatornis.caripensis.current.models.out"))
+load(paste0(path_model, "/Oilbird.Steatornis.caripensis/Oilbird.Steatornis.caripensis.current.ensemble.models.out"))             
 
 # Present
-ensemble_pred <- rast(paste0(model_path, "/Oilbird.Steatornis.caripensis/proj_def_current/", 
+ensemble_pred <- rast(paste0(path_model, "/Oilbird.Steatornis.caripensis/proj_def_current/", 
                              "proj_def_current_Oilbird.Steatornis.caripensis_ensemble.tif"))
 
 # Futures
-ens_pred_126_2040 <- rast(paste0(model_path, "/Oilbird.Steatornis.caripensis/proj_ens_p_126_2040/",
+ens_pred_126_2040 <- rast(paste0(path_model, "/Oilbird.Steatornis.caripensis/proj_ens_p_126_2040/",
                                       "proj_ens_p_126_2040_Oilbird.Steatornis.caripensis_ensemble.tif"))
 
-ens_pred_126_2071 <- rast(paste0(model_path, "/Oilbird.Steatornis.caripensis/proj_ens_p_126_2071/",
+ens_pred_126_2071 <- rast(paste0(path_model, "/Oilbird.Steatornis.caripensis/proj_ens_p_126_2071/",
                                       "proj_ens_p_126_2071_Oilbird.Steatornis.caripensis_ensemble.tif"))
 
-ens_pred_585_2040 <- rast(paste0(model_path, "/Oilbird.Steatornis.caripensis/proj_ens_p_585_2040/",
+ens_pred_585_2040 <- rast(paste0(path_model, "/Oilbird.Steatornis.caripensis/proj_ens_p_585_2040/",
                                       "proj_ens_p_585_2040_Oilbird.Steatornis.caripensis_ensemble.tif"))
 
 ens_pred_585_2071 <- rast(paste0(model_path, "/Oilbird.Steatornis.caripensis/proj_ens_p_585_2071/",
@@ -487,7 +488,7 @@ area_plot <- ggplot(area_df, aes(x = period, y = area_km2, group = scenario, col
               coord_cartesian(clip = "off")
 
 area_plot
-path_final <- "C:/Users/gabyo/Escritorio/EDS_capstone_R/data/Outputs/figures"
+path_final <- here("data","Outputs","figures")
 ggsave(filename = paste0(path_final, '/', 'area_plot.png'),
        plot = area_plot, width = 9, height = 8 ,dpi=300)
 

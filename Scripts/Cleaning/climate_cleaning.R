@@ -1,7 +1,7 @@
 #R code for capstone project EDS programme- Yale
 #Climate data cleanning
 #Gabriela Pena-Bello
-#Last modification : 12.03.2026
+#Last modification : 26.03.2026
 
 
 # Description
@@ -42,18 +42,21 @@
 ################################################################################
 #Prepare workspace
 ###############################################################################
+here()
 # clear work space
 rm(list=ls())
-
-# Set working space
-setwd("C:/Users/gabyo/Escritorio/EDS_capstone_R")
 
 #Install and Load  packages
 install.packages("pacman") # allows to install and load on same line
 library(pacman)
 
+#If you already have any of this packges simply use library not pacman
 pacman::p_load(
-  devtools,# allows to install from web
+  #allows to install from web
+  devtools,#includes remotes
+  
+  # file referencing
+  here,
   # data manipulation
   dplyr,tidyverse, stringr,purrr,readr,
   
@@ -63,7 +66,7 @@ pacman::p_load(
   GGally, # correlation plots
   
   #Packages for spatial data
-  terra,sf,tidyterra
+  terra,sf,tidyterra,
   
   #Analysis
   caret,# correlation
@@ -80,19 +83,18 @@ library(ClimDatDownloadR)
 #Load data
 ###############################################################################
 # Colombia shapefile
-path <-"C:/Users/gabyo/Escritorio/EDS_capstone_R/data/clean_data/climate"
 #read political map
-COL <- st_read("C:/Users/gabyo/Escritorio/EDS_capstone_R/data/raw_data/colombia/COLOMBIA_LEVEL_1.shp",
+COL <- st_read(here("data","raw_data","colombia","COLOMBIA_LEVEL_1.shp"),
                layer = "COLOMBIA_LEVEL_1") # Ithas municipalities
 #join municipalities
 COL <-st_union(COL)
 plot(COL)
 extent(COL)#extracts limits of shapefile
 #save map
-st_write(COL, "C:/Users/gabyo/Escritorio/EDS_capstone_R/data/clean_data/colombia/Col.shp")
+st_write(COL, here("data","clean_data","colombia","Col.shp"))
 
-## Write shapefile clean
-COL <- st_read("C:/Users/gabyo/Escritorio/EDS_capstone_R/data//clean_data/colombia/Col.shp")
+## Load shapefile clean
+COL <- st_read(here("data","clean_data","colombia","Col.shp"))
 
 #extracts bounding box
 bb <- st_bbox(COL)
@@ -102,6 +104,8 @@ col_limits <- c(bb["xmin"], bb["xmax"], bb["ymin"], bb["ymax"])
 ######################
 #Climate data current
 ######################
+# Set path for outputs of the download
+path <-here("data","raw_data","climate")
 
 options(timeout =3600)#extend time for download
 bioclim_c <- ClimDatDownloadR:: Chelsa.Clim.download(  
@@ -115,10 +119,16 @@ bioclim_c <- ClimDatDownloadR:: Chelsa.Clim.download(
                                stacking.data = FALSE,  
                                combine.raw.zip = FALSE,  
                                delete.raw.data = TRUE,  
-                               save.download.table = TRUE)
+                               save.download.table = TRUE,
+                               save.bib.file = FALSE)
 
+# These creates automatically a folder
+all_dirs <- list.dirs(path, full.names = TRUE, recursive = TRUE)
+clipped_dirs <- all_dirs[grepl("clipped_", all_dirs)]
 
-path_2 <-"C:/Users/gabyo/Escritorio/EDS_capstone_R/data/raw_data/climate/ChelsaV2.1Climatologies/clipped_2026-03-10_18-04-53"
+# get most recent folder
+path_2 <- clipped_dirs[which.max(file.info(clipped_dirs)$mtime)]
+
 files_cur <- list.files(path_2, pattern = ".tif$", full.names = TRUE)
 bioc_current <- rast(files_cur)
 names(bioc_current)
@@ -135,7 +145,8 @@ names(bioc_current_m) <- c("bio_01","bio_02","bio_03","bio_04","bio_05",
                            "bio_18","bio_19")
 
 #save mask data
-terra::writeRaster(x = bioc_current_m, filename = paste0(path, '/', 'bioc_current_m.tif'), 
+path_clean <- here("data","clean_data","climate")
+terra::writeRaster(x = bioc_current_m, filename = paste0(path_clean, '/', 'bioc_current_m_2.tif'), 
                    overwrite = T)
 
 #####################
@@ -156,9 +167,18 @@ bioc_126<- ClimDatDownloadR:: Chelsa.CMIP_6.download(
                                 convert.files.to.asc = FALSE,  
                                 stacking.data = FALSE,  
                                 combine.raw.zip = FALSE,  
-                                delete.raw.data = TRUE)
+                                delete.raw.data = TRUE,
+                                save.bib.file = FALSE)
 
-path_3 <-"C:/Users/gabyo/Escritorio/EDS_capstone_R/data/raw_data/climate/ChelsaCMIP6Climatologies/clipped_2026-03-10_20-57-26"
+
+# These creates automatically a folder
+all_dirs <- list.dirs(path, full.names = TRUE, recursive = TRUE)
+clipped_dirs <- all_dirs[grepl("clipped_", all_dirs)]
+
+# get most recent folder
+path_3 <- clipped_dirs[which.max(file.info(clipped_dirs)$mtime)]
+
+# get file
 files_126 <- list.files(path_3, pattern = ".tif$", full.names = TRUE)
 
 ###Split by time range
@@ -191,8 +211,8 @@ plot(bioc_126_2071)
 bioc_126_2071_m <- terra::mask(bioc_126_2071, COL)
 
 #save rasters
-terra::writeRaster(x = bioc_126_2040_m, filename = paste0(path, '/', 'bioc_126_2040_m.tif'), overwrite = T)
-terra::writeRaster(x = bioc_126_2071_m, filename = paste0(path, '/', 'bioc_126_2071_m.tif'), overwrite = T)
+terra::writeRaster(x = bioc_126_2040_m, filename = paste0(path_clean, '/', 'bioc_126_2040_m.tif'), overwrite = T)
+terra::writeRaster(x = bioc_126_2071_m, filename = paste0(path_clean, '/', 'bioc_126_2071_m.tif'), overwrite = T)
 
 #______________________________________________________
 #scenario ssp585 extreme scenario, with high emissions
@@ -215,7 +235,14 @@ bioc_585<- ClimDatDownloadR:: Chelsa.CMIP_6.download(
 class(bioc_585)
 #object bioc_585 is an integrer need to read raster directly from folder
 
-path_4 <-"C:/Users/gabyo/Escritorio/EDS_capstone_R/data/raw_data/climate/ChelsaCMIP6Climatologies/clipped_2026-03-10_22-03-54"
+# These creates automatically a folder
+all_dirs <- list.dirs(path, full.names = TRUE, recursive = TRUE)
+clipped_dirs <- all_dirs[grepl("clipped_", all_dirs)]
+
+# get most recent folder
+path_4 <- clipped_dirs[which.max(file.info(clipped_dirs)$mtime)]
+
+#get files
 files_585 <- list.files(path_4, pattern = ".tif$", full.names = TRUE)
 
 ###Split by time range
@@ -251,13 +278,13 @@ plot(bioc_585_2071)
 bioc_585_2071_m <- terra::mask(bioc_585_2071, COL)
 
 #save rasters
-terra::writeRaster(x = bioc_585_2040_m, filename = paste0(path, '/', 'bioc_585_2040_m.tif'), overwrite = T)
-terra::writeRaster(x = bioc_585_2071_m, filename = paste0(path, '/', 'bioc_585_2071_m.tif'), overwrite = T)
+terra::writeRaster(x = bioc_585_2040_m, filename = paste0(path_clean, '/', 'bioc_585_2040_m.tif'), overwrite = T)
+terra::writeRaster(x = bioc_585_2071_m, filename = paste0(path_clean, '/', 'bioc_585_2071_m.tif'), overwrite = T)
 
 #####################
 #Load occurence data
 #####################
-oilbird_occ_f <- read_csv("C:/Users/gabyo/Escritorio/EDS_capstone_R/data/clean_data/occurence/oilbird_occf.csv")
+oilbird_occ_f <- read_csv( here("data","clean_data","occurence","oilbird_occf.csv"))
 
 summary(oilbird_occ_f )
 
@@ -320,8 +347,8 @@ occ_env <- cbind(occ_clean, values_occ)
 head(occ_env)
 
 # Save complete dataset
-write.csv(occ_env,"C:/Users/gabyo/Escritorio/EDS_capstone_R/data/clean_data/occ_clean.csv" )
-write.csv(values_occ,"C:/Users/gabyo/Escritorio/EDS_capstone_R/data/clean_data/values_occ.csv" )
+write.csv(occ_env,here("data","clean_data","occurence","occ_clean.csv"))
+write.csv(values_occ,here("data","clean_data","occurence","values_occ.csv"))
 
 # Select only data essential for analysis, remove metadata
 occ_env_f <- select(occ_env,decimalLongitude, decimalLatitude, ID,
@@ -373,7 +400,7 @@ vif.step
 vrs <- vif.step@results$Variables %>% as.character()
 vrs # bio 2,3,4,6,12,15,18,19, but do they represent each gradient ecological?
 
-write.csv(vrs,"C:/Users/gabyo/Escritorio/EDS_capstone_R/data/Analysis/climate_cleaning/vif_vars.csv" )
+write.csv(vrs, here("data","Analysis","climate_cleaning","vif_vars.csv") )
 
 #############
 ##PCA: Understand variation - ecological importance
@@ -390,7 +417,8 @@ pca_plot <-fviz_pca_biplot(pca,
                 col.ind = "grey30",
                 col.var = "red",
                 repel = TRUE)
-ggsave (filename= "pca_plot.png", plot=pca_plot, path = path, 
+ggsave (filename= "pca_plot.png", plot=pca_plot, path = 
+          here("data","Analysis","climate_cleaning"), 
         dpi=300,width = 8,height=6)
 
 # Variance explain per each component
@@ -430,13 +458,13 @@ vif.2 <- vif(x = value_occ_clean)
 colnames(occ_env)
 occ_env_clean <- select(occ_env, ...1,decimalLatitude,decimalLongitude,
                         bio_01,bio_02,bio_04,bio_12,bio_15,bio_18)
-write.csv(occ_env_clean,"C:/Users/gabyo/Escritorio/EDS_capstone_R/data/clean_data/occ_env_clean.csv" )
+write.csv(occ_env_clean,here("data","clean_data","occ_env_clean.csv"))
 
 # Filter rasters of bioblimatic variables with defined variables
 
 ##  Current
 clima <- bioc_current_m[[c("bio_01","bio_02","bio_04","bio_12","bio_15","bio_18")]]
-terra::writeRaster(x = clima, filename = paste0(path, '/', 'clima.tif'), overwrite = T)
+terra::writeRaster(x = clima, filename = paste0(path_clean, '/', 'clima.tif'), overwrite = T)
 
 ## Future
 #ssp126-2040-2070
@@ -444,13 +472,13 @@ clim_126_2040 <- bioc_126_2040_m [[c("bio_01","bio_02","bio_04","bio_12","bio_15
 #ssp585-2070-2100
 clim_126_2071 <- bioc_126_2071_m [[c("bio_01","bio_02","bio_04","bio_12","bio_15","bio_18")]]
 
-terra::writeRaster(x = clim_126_2040, filename = paste0(path, '/', 'clim_126_2040.tif'), overwrite = T)
-terra::writeRaster(x = clim_126_2071, filename = paste0(path, '/', 'clim_126_2071.tif'), overwrite = T)
+terra::writeRaster(x = clim_126_2040, filename = paste0(path_clean, '/', 'clim_126_2040.tif'), overwrite = T)
+terra::writeRaster(x = clim_126_2071, filename = paste0(path_clean, '/', 'clim_126_2071.tif'), overwrite = T)
 
 #ssp585-2040-2070
 clim_585_2040 <- bioc_585_2040_m [[c("bio_01","bio_02","bio_04","bio_12","bio_15","bio_18")]]
 #ssp585-2070-2100
 clim_585_2071 <- bioc_585_2071_m [[c("bio_01","bio_02","bio_04","bio_12","bio_15","bio_18")]]
 
-terra::writeRaster(x = clim_585_2040, filename = paste0(path, '/', 'clim_585_2040.tif'), overwrite = T)
-terra::writeRaster(x = clim_585_2071, filename = paste0(path, '/', 'clim_585_2071.tif'), overwrite = T)
+terra::writeRaster(x = clim_585_2040, filename = paste0(path_clean, '/', 'clim_585_2040.tif'), overwrite = T)
+terra::writeRaster(x = clim_585_2071, filename = paste0(path_clean, '/', 'clim_585_2071.tif'), overwrite = T)
