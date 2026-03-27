@@ -1,4 +1,4 @@
-# Project: Impact of climate change on oilbirds (*Steatornis caripensis*)in Colombia
+# Project: Impact of climate change on oilbirds (*Steatornis caripensis*) in Colombia
 
 Author: Gabriela Peña Bello
 
