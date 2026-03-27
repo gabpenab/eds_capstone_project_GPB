@@ -30,19 +30,27 @@ To start working on this project in RStudio, open the .Rproj file. This ensures 
 2.	Clean ocurrence data: remove records without coordinates, remove unnecessary  collumns, correct errors  and filter for spatial redundance.
 
 Script: /Cleaning/occ_cleaning_oilb.ipynb
+
 3.	Clean climate data: Clip the raster to Colombia, analyze multicollinariaty and select key variables (correlation and PCA).
-
 Script: /Cleaning/climate_cleaning
-4.	Create pseudo-absence points
 
+4.	Create pseudo-absence points
 Script: this and all the following steps are in Analysis/modeling
+
 5.	Create model with cross-validation
+
 6. Evaluate model performance and variable importance
+
 7.	Build the ensemble model
+
 8. Project current habitat
+
 9.	 Plot and refine the map
+
 10.	 Project future suitability under both scenarios
+
 11. Compare present and future suitability
+
 12. Refine plots
 
 ## CAVEATS
